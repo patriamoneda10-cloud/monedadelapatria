@@ -1,0 +1,1935 @@
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Monedas de la Patria - Sistema Integrado</title>
+  <style>
+    /* Estilos generales */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      line-height: 1.6;
+      color: #333;
+      background-color: #f8f9fa;
+    }
+    
+    /* Header principal */
+    .main-header {
+      background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+      color: white;
+      padding: 1rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+    
+    .logo-container {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+    
+    .logo {
+      width: 70px;
+      height: 70px;
+      background: linear-gradient(135deg, #d4af37 0%, #ffd700 50%, #d4af37 100%);
+      border-radius: 50%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      color: #1e3c72;
+      font-weight: bold;
+      border: 3px solid white;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+      overflow: hidden;
+    }
+    
+    .logo-symbol {
+      font-size: 1.8rem;
+      line-height: 1;
+    }
+    
+    .logo-text {
+      font-size: 0.6rem;
+      text-align: center;
+      line-height: 1;
+      margin-top: 2px;
+    }
+    
+    .site-title {
+      font-size: 1.8rem;
+    }
+    
+    .main-nav {
+      display: flex;
+      gap: 1rem;
+    }
+    
+    .nav-button {
+      background-color: rgba(255,255,255,0.2);
+      border: none;
+      color: white;
+      padding: 0.5rem 1rem;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+      font-weight: 500;
+    }
+    
+    .nav-button:hover {
+      background-color: rgba(255,255,255,0.3);
+    }
+    
+    .nav-button.active {
+      background-color: rgba(255,255,255,0.4);
+    }
+    
+    /* Contenedor principal */
+    .container {
+      max-width: 1200px;
+      margin: 2rem auto;
+      padding: 0 1rem;
+    }
+    
+    /* Secciones */
+    .section {
+      display: none;
+      background-color: white;
+      border-radius: 8px;
+      box-shadow: 0 2px 15px rgba(0,0,0,0.05);
+      overflow: hidden;
+      margin-bottom: 2rem;
+    }
+    
+    .section.active {
+      display: block;
+    }
+    
+    .section-header {
+      background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+      color: white;
+      padding: 1.5rem 2rem;
+    }
+    
+    .section-header h1 {
+      font-size: 1.5rem;
+      margin-bottom: 0.5rem;
+    }
+    
+    /* Sistema de compras/ventas */
+    .commerce-content {
+      display: flex;
+      flex-wrap: wrap;
+    }
+    
+    .user-area {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+      align-items: center;
+      padding: 1rem;
+      background-color: #f8f9fa;
+      border-bottom: 1px solid #dee2e6;
+    }
+    
+    .user-area label {
+      margin-right: 0.5rem;
+    }
+    
+    .user-area select, .user-area input {
+      padding: 0.5rem;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+    }
+    
+    .user-area button {
+      background-color: #e9ecef;
+      border: none;
+      padding: 0.5rem 1rem;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+    
+    .user-area button:hover {
+      background-color: #dee2e6;
+    }
+    
+    .current-user {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin-left: auto;
+      padding: 0.5rem 1rem;
+      background-color: #d4edda;
+      border-radius: 4px;
+      border: 1px solid #c3e6cb;
+    }
+    
+    .current-user span {
+      font-weight: 500;
+    }
+    
+    .btn-logout {
+      background-color: #dc3545;
+      color: white;
+      border: none;
+      padding: 0.25rem 0.5rem;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 0.8rem;
+    }
+    
+    .catalogo {
+      flex: 3;
+      padding: 1.5rem;
+      min-width: 300px;
+    }
+    
+    .catalogo h2 {
+      color: #495057;
+      margin-bottom: 1rem;
+      border-bottom: 2px solid #e9ecef;
+      padding-bottom: 0.5rem;
+    }
+    
+    .user-required-message {
+      background-color: #fff3cd;
+      border: 1px solid #ffeaa7;
+      padding: 1rem;
+      border-radius: 4px;
+      margin-bottom: 1rem;
+    }
+    
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 1rem;
+    }
+    
+    .coin-card {
+      background-color: #f8f9fa;
+      border: 1px solid #dee2e6;
+      border-radius: 4px;
+      padding: 1rem;
+      text-align: center;
+      transition: transform 0.3s, box-shadow 0.3s;
+    }
+    
+    .coin-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    }
+    
+    .coin-image {
+      width: 150px;
+      height: 150px;
+      margin: 0 auto 1rem;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      border: 3px solid #dee2e6;
+      background-color: #f8f9fa;
+    }
+    
+    .coin-image img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    
+    .coin-stock {
+      margin: 0.5rem 0;
+      font-weight: 500;
+      color: #495057;
+    }
+    
+    .stock-low {
+      color: #dc3545;
+    }
+    
+    .stock-medium {
+      color: #ffc107;
+    }
+    
+    .stock-high {
+      color: #28a745;
+    }
+    
+    .coin-actions {
+      margin-top: 1rem;
+      display: flex;
+      justify-content: center;
+      gap: 0.5rem;
+    }
+    
+    .btn-buy, .btn-sell {
+      padding: 0.4rem 0.8rem;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-weight: 500;
+      transition: all 0.3s;
+    }
+    
+    .btn-buy {
+      background-color: #28a745;
+      color: white;
+    }
+    
+    .btn-buy:hover:not(:disabled) {
+      background-color: #218838;
+    }
+    
+    .btn-buy:disabled {
+      background-color: #6c757d;
+      cursor: not-allowed;
+      opacity: 0.6;
+    }
+    
+    .btn-sell {
+      background-color: #dc3545;
+      color: white;
+    }
+    
+    .btn-sell:hover:not(:disabled) {
+      background-color: #c82333;
+    }
+    
+    .btn-sell:disabled {
+      background-color: #6c757d;
+      cursor: not-allowed;
+      opacity: 0.6;
+    }
+    
+    .panel {
+      flex: 1;
+      background-color: #f8f9fa;
+      padding: 1.5rem;
+      min-width: 250px;
+      border-left: 1px solid #dee2e6;
+    }
+    
+    .panel h3 {
+      color: #495057;
+      margin-bottom: 1rem;
+    }
+    
+    .ticket {
+      background-color: white;
+      border: 1px solid #dee2e6;
+      border-radius: 4px;
+      padding: 1rem;
+      min-height: 200px;
+      margin-bottom: 1rem;
+    }
+    
+    .report-actions {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+    
+    .btn-report {
+      background-color: #17a2b8;
+      color: white;
+      border: none;
+      padding: 0.5rem 1rem;
+      border-radius: 4px;
+      cursor: pointer;
+      font-weight: 500;
+    }
+    
+    .btn-report:hover {
+      background-color: #138496;
+    }
+    
+    /* Sistema de correos */
+    .email-content {
+      display: flex;
+      flex-wrap: wrap;
+    }
+    
+    .email-sidebar {
+      flex: 1;
+      background-color: #f8f9fa;
+      padding: 1.5rem;
+      min-width: 250px;
+      border-right: 1px solid #dee2e6;
+    }
+    
+    .email-main {
+      flex: 3;
+      padding: 1.5rem;
+      min-width: 300px;
+    }
+    
+    .email-sidebar h3, .email-main h3 {
+      color: #495057;
+      margin-bottom: 1rem;
+      border-bottom: 2px solid #e9ecef;
+      padding-bottom: 0.5rem;
+    }
+    
+    .client-list {
+      max-height: 400px;
+      overflow-y: auto;
+    }
+    
+    .client-item {
+      padding: 0.75rem;
+      border-bottom: 1px solid #dee2e6;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+    
+    .client-item:hover {
+      background-color: #e9ecef;
+    }
+    
+    .client-item.selected {
+      background-color: #d4edda;
+      border-left: 4px solid #28a745;
+    }
+    
+    .client-name {
+      font-weight: 500;
+    }
+    
+    .client-email {
+      font-size: 0.85rem;
+      color: #6c757d;
+    }
+    
+    .email-form {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+    
+    .form-group {
+      display: flex;
+      flex-direction: column;
+    }
+    
+    .form-group label {
+      margin-bottom: 0.5rem;
+      color: #495057;
+      font-weight: 500;
+    }
+    
+    .form-group input, .form-group textarea, .form-group select {
+      padding: 0.75rem;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      font-family: inherit;
+    }
+    
+    .form-group textarea {
+      min-height: 150px;
+      resize: vertical;
+    }
+    
+    .recipient-selector {
+      display: flex;
+      gap: 1rem;
+      margin-bottom: 1rem;
+    }
+    
+    .recipient-option {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    
+    .email-actions {
+      display: flex;
+      gap: 1rem;
+      margin-top: 1rem;
+    }
+    
+    .btn-primary {
+      background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+      color: white;
+      border: none;
+      padding: 0.75rem 1.5rem;
+      border-radius: 4px;
+      cursor: pointer;
+      font-weight: 500;
+      transition: transform 0.3s, box-shadow 0.3s;
+    }
+    
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    }
+    
+    .btn-secondary {
+      background-color: #6c757d;
+      color: white;
+      border: none;
+      padding: 0.75rem 1.5rem;
+      border-radius: 4px;
+      cursor: pointer;
+      font-weight: 500;
+    }
+    
+    .btn-secondary:hover {
+      background-color: #5a6268;
+    }
+    
+    .email-templates {
+      margin-top: 2rem;
+    }
+    
+    .template-list {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+      margin-top: 1rem;
+    }
+    
+    .template-item {
+      background-color: #f8f9fa;
+      border: 1px solid #dee2e6;
+      border-radius: 4px;
+      padding: 1rem;
+      cursor: pointer;
+      transition: background-color 0.3s;
+      flex: 1;
+      min-width: 200px;
+    }
+    
+    .template-item:hover {
+      background-color: #e9ecef;
+    }
+    
+    .template-title {
+      font-weight: 500;
+      margin-bottom: 0.5rem;
+    }
+    
+    .template-desc {
+      font-size: 0.85rem;
+      color: #6c757d;
+    }
+    
+    /* Sección de Historia */
+    .history-content {
+      padding: 2rem;
+    }
+    
+    .history-content h2 {
+      color: #495057;
+      margin-bottom: 1.5rem;
+      border-bottom: 2px solid #e9ecef;
+      padding-bottom: 0.5rem;
+    }
+    
+    .history-content h3 {
+      color: #495057;
+      margin: 1.5rem 0 1rem;
+    }
+    
+    .history-content p {
+      margin-bottom: 1rem;
+      text-align: justify;
+    }
+    
+    .history-periods {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+      margin-top: 2rem;
+    }
+    
+    .period-card {
+      flex: 1;
+      min-width: 250px;
+      background-color: #f8f9fa;
+      border: 1px solid #dee2e6;
+      border-radius: 8px;
+      padding: 1.5rem;
+      transition: transform 0.3s, box-shadow 0.3s;
+    }
+    
+    .period-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    }
+    
+    .period-card h4 {
+      color: #495057;
+      margin-bottom: 1rem;
+      border-bottom: 1px solid #dee2e6;
+      padding-bottom: 0.5rem;
+    }
+    
+    .period-card ul {
+      padding-left: 1.5rem;
+    }
+    
+    .period-card li {
+      margin-bottom: 0.5rem;
+    }
+    
+    /* Footer general */
+    .footer {
+      background-color: #343a40;
+      color: white;
+      padding: 1.5rem;
+      text-align: center;
+      border-radius: 8px;
+      margin-top: 2rem;
+    }
+    
+    .social-links {
+      margin-top: 1rem;
+    }
+    
+    .social-links a {
+      color: white;
+      margin: 0 0.5rem;
+      text-decoration: none;
+    }
+    
+    .social-links a:hover {
+      text-decoration: underline;
+    }
+    
+    /* Modales */
+    .modal {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0,0,0,0.5);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+    }
+    
+    .modal.hidden {
+      display: none;
+    }
+    
+    .modal-content {
+      background-color: white;
+      padding: 2rem;
+      border-radius: 8px;
+      width: 90%;
+      max-width: 500px;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+    }
+    
+    .modal-content h3 {
+      margin-bottom: 1rem;
+      color: #495057;
+    }
+    
+    .modal-content label {
+      display: block;
+      margin-bottom: 0.5rem;
+      color: #495057;
+    }
+    
+    .modal-content input {
+      width: 100%;
+      padding: 0.5rem;
+      margin-bottom: 1rem;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+    }
+    
+    .modal-actions {
+      display: flex;
+      justify-content: flex-end;
+      gap: 1rem;
+      margin-top: 1.5rem;
+    }
+    
+    .modal-actions button {
+      padding: 0.5rem 1rem;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    
+    #btnSaveUser, #btnLogin, #btnConfirmOp {
+      background-color: #007bff;
+      color: white;
+    }
+    
+    .btnClose {
+      background-color: #6c757d;
+      color: white;
+    }
+    
+    /* Modal de imagen ampliada */
+    .image-modal {
+      background-color: rgba(0,0,0,0.8);
+    }
+    
+    .image-modal-content {
+      max-width: 90%;
+      max-height: 90%;
+      background: transparent;
+      box-shadow: none;
+    }
+    
+    .enlarged-coin-image {
+      max-width: 100%;
+      max-height: 80vh;
+      border-radius: 8px;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+    }
+    
+    /* Responsive */
+    @media (max-width: 768px) {
+      .main-header {
+        flex-direction: column;
+        gap: 1rem;
+      }
+      
+      .main-nav {
+        width: 100%;
+        justify-content: center;
+      }
+      
+      .user-area {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+      
+      .current-user {
+        margin-left: 0;
+        width: 100%;
+        justify-content: space-between;
+      }
+      
+      .commerce-content, .email-content {
+        flex-direction: column;
+      }
+      
+      .panel {
+        border-left: none;
+        border-top: 1px solid #dee2e6;
+      }
+      
+      .email-sidebar {
+        border-right: none;
+        border-bottom: 1px solid #dee2e6;
+      }
+      
+      .coin-image {
+        width: 120px;
+        height: 120px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+       <!-- Header principal del sitio -->
+  <header class="main-header">
+  <div class="logo-container">
+  <img src="logo.png" alt="Logo Monedas de la Patria" width="180" height="180" class="logo-real">
+  <h1 class="site-title" >Monedas de la Patria</h1>
+   </div>
+    <nav class="main-nav">
+      <button class="nav-button active" data-section="commerce">Compras/Ventas</button>
+      <button class="nav-button" data-section="history">Historia Monetaria</button>
+      <button class="nav-button" data-section="email">Enviar Correos</button>
+    </nav>
+  </header>
+
+  <div class="container">
+    <!-- Sección de Compras/Ventas -->
+    <section id="commerce-section" class="section active">
+      <header class="section-header">
+        <h1>Compras y Ventas de Monedas Argentinas</h1>
+      </header>
+
+      <div class="user-area">
+        <label>Usuario registrado:</label>
+        <select id="userSelect">
+          <option value="">-- seleccionar --</option>
+          <!-- Los usuarios se cargarán dinámicamente -->
+        </select>
+        <button id="btnNewUser">Nuevo usuario</button>
+        <button id="btnOpenRegister">Ingresar por DNI o Nombre</button>
+        
+        <div id="currentUserDisplay" class="current-user" style="display: none;">
+          <span id="currentUserName">Usuario</span>
+          <button id="btnLogout" class="btn-logout">Cerrar sesión</button>
+        </div>
+      </div>
+
+      <div class="commerce-content">
+        <section class="catalogo">
+          <h2>Catálogo de monedas</h2>
+          <div id="userRequiredMessage" class="user-required-message" style="display: none;">
+            <p>Debe <strong>registrarse o seleccionar un usuario</strong> para realizar operaciones de compra y venta.</p>
+          </div>
+          <div id="coinsGrid" class="grid">
+            <!-- Monedas con imágenes reales -->
+            <div class="coin-card" data-id="1" data-stock="5">
+              <div class="coin-image">
+  <img src="moneda1.jpeg" alt="100 Pesos 1978" class="coin-photo">
+</div>
+              <h3>100 Pesos (1978)</h3>
+              <p>Moneda conmemorativa de alta denominación</p>
+              <p class="price">$2,500</p>
+              <p class="coin-stock stock-high">Stock: <span class="stock-count">5</span></p>
+              <div class="coin-actions">
+                <button class="btn-buy" disabled>Comprar</button>
+                <button class="btn-sell" disabled>Vender</button>
+              </div>
+            </div>
+            
+            <div class="coin-card" data-id="2" data-stock="3">
+              <div class="coin-image">
+                <img src="moneda2.jpeg" alt="½ Centavo 1985" class="coin-photo">
+              </div>
+              <h3> 100 australes de Argentina, acuñada en 1990</h3>
+              <p>Tiene un diámetro de 21 mm y un peso de 1.9 gramos</p>
+              <p class="price">$150</p>
+              <p class="coin-stock stock-medium">Stock: <span class="stock-count">3</span></p>
+              <div class="coin-actions">
+                <button class="btn-buy" disabled>Comprar</button>
+                <button class="btn-sell" disabled>Vender</button>
+              </div>
+            </div>
+            
+            <div class="coin-card" data-id="3" data-stock="0">
+              <div class="coin-image">
+                <img src="moneda3.jpeg" alt="Bono Liberzo Decca" class="coin-photo">
+              </div>
+              <h3>Moneda argentina de 1/2 centavo de austral del año 1985</h3>
+              <p>La moneda fue acuñada en bronce de aluminio.</p>
+              <p class="price">$800</p>
+              <p class="coin-stock stock-low">Stock: <span class="stock-count">0</span></p>
+              <div class="coin-actions">
+                <button class="btn-buy" disabled>Comprar</button>
+                <button class="btn-sell" disabled>Vender</button>
+              </div>
+            </div>
+            
+            <div class="coin-card" data-id="4" data-stock="1">
+              <div class="coin-image">
+                <img src="moneda4.jpeg" alt="8 Escudos 1813" class="coin-photo">
+              </div>
+              <h3>8 Escudos (1813)</h3>
+              <p>Moneda de oro del período patrio</p>
+              <p class="price">$15,000</p>
+              <p class="coin-stock stock-low">Stock: <span class="stock-count">1</span></p>
+              <div class="coin-actions">
+                <button class="btn-buy" disabled>Comprar</button>
+                <button class="btn-sell" disabled>Vender</button>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <aside class="panel">
+          <h3>Resumen / Ticket</h3>
+          <div id="ticketArea" class="ticket">
+            <p>No hay operaciones aún.</p>
+            <p>Selecciona un usuario y realiza una operación para ver el resumen aquí.</p>
+          </div>
+          
+          <div class="report-actions">
+            <button id="btnVerTransacciones" class="btn-report">Ver transacciones</button>
+            <button id="btnGenerarReporte" class="btn-report">Generar Reporte JSON</button>
+            <button id="btnCambiarPassword" class="btn-report">Cambiar Contraseña</button>
+          </div>
+        </aside>
+      </div>
+    </section>
+
+    <!-- Sección de Historia Monetaria -->
+    <section id="history-section" class="section">
+      <header class="section-header">
+        <h1>Historia Monetaria de Argentina</h1>
+        <p>Enfoque en las Monedas</p>
+      </header>
+
+      <div class="history-content">
+        <h2>Evolución de las Monedas Argentinas</h2>
+        
+        <p>La historia monetaria de Argentina se caracteriza por una sucesión de diferentes signos monetarios, impulsada principalmente por crisis económicas recurrentes, hiperinflación crónica y políticas fiscales inestables. Desde la independencia en 1816, el país ha experimentado múltiples cambios de moneda, a menudo eliminando ceros para enfrentar la depreciación del valor adquisitivo.</p>
+        
+        <p>Esta inestabilidad refleja problemas estructurales como déficit fiscales, dependencia de exportaciones primarias y shocks externos, lo que ha generado desconfianza en la moneda nacional y ha afectado el bienestar económico. A lo largo de los siglos XIX y XX, Argentina pasó de un sistema fragmentado con monedas provinciales a intentos de estabilización, pero las crisis recurrentes han perpetuado el ciclo de devaluaciones.</p>
+        
+        <p>Un aspecto clave es la evolución de las monedas físicas (coins), que han sido acuñadas en diversos metales y denominaciones, pero cuya utilidad ha disminuido drásticamente con la inflación. En la actualidad, las monedas prácticamente no se usan en transacciones cotidianas, ya que pierden valor rápidamente y la población prefiere billetes o pagos electrónicos.</p>
+
+        <h3>Períodos Clave de la Moneda Argentina</h3>
+        
+        <div class="history-periods">
+          <div class="period-card">
+            <h4>Período Colonial (hasta 1816)</h4>
+            <p>Circulaba el real español como unidad principal, con monedas acuñadas principalmente en plata y oro.</p>
+            <ul>
+              <li>Reales y pesos en plata</li>
+              <li>Doblones en oro</li>
+              <li>Sistema bimetálico estandarizado</li>
+            </ul>
+          </div>
+          
+          <div class="period-card">
+            <h4>Monedas Provinciales (1816-1881)</h4>
+            <p>No hubo una moneda unificada, las provincias emitían sus propias monedas.</p>
+            <ul>
+              <li>Monedas en cobre, plata y papel</li>
+              <li>Fragmentación monetaria</li>
+              <li>Real argentino heredado del colonialismo</li>
+            </ul>
+          </div>
+          
+          <div class="period-card">
+            <h4>Peso Moneda Nacional (1881-1969)</h4>
+            <p>Introdujo monedas con respaldo en oro y plata.</p>
+            <ul>
+              <li>Monedas en cobre-níquel y plata</li>
+              <li>"Argentino" oro de 5 pesos</li>
+              <li>Suspensión del patrón oro en 1890</li>
+            </ul>
+          </div>
+          
+          <div class="period-card">
+            <h4>Peso Ley (1970-1983)</h4>
+            <p>Eliminación de ceros, monedas en aluminio y cobre-níquel.</p>
+            <ul>
+              <li>Hiperinflación hizo obsoletas las monedas</li>
+              <li>Población prefería billetes</li>
+              <li>Monedas de bajo valor rápidamente depreciadas</li>
+            </ul>
+          </div>
+          
+          <div class="period-card">
+            <h4>Peso Argentino (1983-1985)</h4>
+            <p>Eliminación de cuatro ceros, monedas en aluminio y cobre-níquel.</p>
+            <ul>
+              <li>Inflación acelerada</li>
+              <li>Monedas circularon poco</li>
+              <li>Valor se depreciaba en días</li>
+            </ul>
+          </div>
+          
+          <div class="period-card">
+            <h4>Austral (1985-1991)</h4>
+            <p>Eliminación de tres ceros, monedas en aluminio y cobre.</p>
+            <ul>
+              <li>Plan Austral inicialmente estable</li>
+              <li>Hiperinflación posterior</li>
+              <li>Monedas acumuladas sin uso</li>
+            </ul>
+          </div>
+          
+          <div class="period-card">
+            <h4>Peso Actual (1992-presente)</h4>
+            <p>Eliminación de cuatro ceros al austral.</p>
+            <ul>
+              <li>Monedas en aluminio, cobre-níquel y bimetálicas</li>
+              <li>Convertibilidad (1992-2001)</li>
+              <li>Devaluación de 2002</li>
+              <li>Hiperinflación crónica actual</li>
+            </ul>
+          </div>
+        </div>
+        
+        <h3>Situación Actual</h3>
+        <p>En la actualidad, las monedas representan menos del 1% de las transacciones; por ejemplo, un billete de 1 peso (el más pequeño) equivale a unas 100 monedas de 1 centavo, pero la gente evita monedas por su bajo poder adquisitivo y el costo de contarlas. El Banco Central aún las acuña, pero se usam principalmente en máquinas expendedoras o como cambio simbólico, mientras que pagos digitales (como transferencias bancarias o QR codes) dominan.</p>
+        
+        <p>Esto refleja la "demonetización" de las monedas físicas en una economía hiperinflacionaria, similar a casos históricos como Weimar Alemania o Zimbabue. Argentina ha tenido seis cambios de signo monetario desde 1881, con monedas que evolucionaron de metales preciosos (oro y plata) a aleaciones baratas (aluminio y cobre-níquel), pero cuya relevancia ha declinado por la inflación.</p>
+        
+        <p>El desuso actual de las monedas destaca la adaptación a la inestabilidad, con un impacto en la economía informal y la preferencia por activos estables como el dólar.</p>
+      </div>
+    </section>
+
+    <!-- Sección de Envío de Correos -->
+    <section id="email-section" class="section">
+      <header class="section-header">
+        <h1>Sistema de Envío de Correos</h1>
+        <p>Comunícate con tus clientes de forma personalizada</p>
+      </header>
+
+      <div class="email-content">
+        <aside class="email-sidebar">
+          <h3>Lista de Clientes</h3>
+          <div class="client-list" id="clientList">
+            <!-- Los clientes se cargarán aquí con JavaScript -->
+          </div>
+        </aside>
+
+        <main class="email-main">
+          <h3>Redactar Correo</h3>
+          
+          <div class="recipient-selector">
+            <div class="recipient-option">
+              <input type="radio" id="recipientSingle" name="recipientType" value="single" checked>
+              <label for="recipientSingle">Cliente seleccionado</label>
+            </div>
+            <div class="recipient-option">
+              <input type="radio" id="recipientAll" name="recipientType" value="all">
+              <label for="recipientAll">Todos los clientes</label>
+            </div>
+          </div>
+          
+          <form class="email-form" id="emailForm">
+            <div class="form-group">
+              <label for="emailSubject">Asunto</label>
+              <input type="text" id="emailSubject" placeholder="Asunto del correo" required>
+            </div>
+            
+            <div class="form-group">
+              <label for="emailBody">Mensaje</label>
+              <textarea id="emailBody" placeholder="Escribe tu mensaje aquí..." required></textarea>
+            </div>
+            
+            <div class="email-actions">
+              <button type="button" class="btn-primary" id="btnSendEmail">Enviar Correo</button>
+              <button type="button" class="btn-secondary" id="btnSaveDraft">Guardar Borrador</button>
+              <button type="button" class="btn-secondary" id="btnClearForm">Limpiar</button>
+            </div>
+          </form>
+          
+          <div class="email-templates">
+            <h3>Plantillas Predefinidas</h3>
+            <div class="template-list">
+              <div class="template-item" data-template="welcome">
+                <div class="template-title">Bienvenida</div>
+                <div class="template-desc">Correo de bienvenida para nuevos clientes</div>
+              </div>
+              <div class="template-item" data-template="promotion">
+                <div class="template-title">Promoción</div>
+                <div class="template-desc">Anunciar ofertas especiales</div>
+              </div>
+              <div class="template-item" data-template="newsletter">
+                <div class="template-title">Boletín Informativo</div>
+                <div class="template-desc">Actualizaciones y novedades</div>
+              </div>
+              <div class="template-item" data-template="transaction">
+                <div class="template-title">Confirmación de Transacción</div>
+                <div class="template-desc">Confirmar compra/venta realizada</div>
+              </div>
+            </div>
+          </div>
+        </main>
+      </div>
+    </section>
+    
+    <!-- Footer general -->
+    <footer class="footer">
+      <p>Monedas de la Patria - Todos los derechos reservados</p>
+      <div class="social-links">
+        <span>Nuestras redes: </span>
+        <a href="https://instagram.com/monedasdelapatria" target="_blank">Instagram</a> |
+        <a href="https://twitter.com/monedasdelapatria" target="_blank">X (Twitter)</a> |
+        <a href="https://facebook.com/monedasdelapatria" target="_blank">Facebook</a>
+      </div>
+    </footer>
+  </div>
+
+  <!-- Modales para Compras/Ventas -->
+  <div id="modalNewUser" class="modal hidden">
+    <div class="modal-content">
+      <h3>Alta de usuario</h3>
+      <label>Nombre completo</label>
+      <input id="txtNewName" type="text" placeholder="Ej: Juan Pérez">
+      <label>DNI</label>
+      <input id="txtNewDNI" type="text" placeholder="Ej: 12345678">
+      <label>Email</label>
+      <input id="txtNewEmail" type="email" placeholder="Ej: usuario@email.com">
+      <div class="modal-actions">
+        <button id="btnSaveUser">Guardar</button>
+        <button class="btnClose">Cerrar</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="modalLogin" class="modal hidden">
+    <div class="modal-content">
+      <h3>Ingresar por DNI o Nombre</h3>
+      <label>DNI o Nombre</label>
+      <input id="txtLogin" type="text" placeholder="Ingrese DNI o nombre">
+      <div class="modal-actions">
+        <button id="btnLogin">Ingresar</button>
+        <button class="btnClose">Cerrar</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="modalOperation" class="modal hidden">
+    <div class="modal-content">
+      <h3 id="opTitle">Operación</h3>
+      <div id="opCoinInfo"></div>
+      <label>Cantidad</label>
+      <input id="txtCantidad" type="number" min="1" value="1">
+      <div class="modal-actions">
+        <button id="btnConfirmOp">Confirmar</button>
+        <button class="btnClose">Cerrar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal para autenticación de compras -->
+  <div id="modalAuth" class="modal hidden">
+    <div class="modal-content">
+      <h3>Autenticación Requerida</h3>
+      <p>Para realizar compras, debe ingresar la contraseña del sistema.</p>
+      <label>Contraseña:</label>
+      <input id="txtPassword" type="password" placeholder="Ingrese la contraseña">
+      <div class="modal-actions">
+        <button id="btnAuth">Verificar</button>
+        <button class="btnClose">Cancelar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal para cambiar contraseña -->
+  <div id="modalChangePassword" class="modal hidden">
+    <div class="modal-content">
+      <h3>Cambiar Contraseña del Sistema</h3>
+      <label>Contraseña actual:</label>
+      <input id="txtCurrentPassword" type="password" placeholder="Contraseña actual">
+      <label>Nueva contraseña:</label>
+      <input id="txtNewPassword" type="password" placeholder="Nueva contraseña">
+      <label>Confirmar nueva contraseña:</label>
+      <input id="txtConfirmPassword" type="password" placeholder="Confirmar nueva contraseña">
+      <div class="modal-actions">
+        <button id="btnChangePassword">Cambiar</button>
+        <button class="btnClose">Cancelar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal para reporte JSON -->
+  <div id="modalReport" class="modal hidden">
+    <div class="modal-content">
+      <h3>Reporte de Transacciones</h3>
+      <div style="max-height: 400px; overflow-y: auto; background-color: #f8f9fa; padding: 1rem; border-radius: 4px;">
+        <pre id="jsonReport"></pre>
+      </div>
+      <div class="modal-actions">
+        <button id="btnDownloadReport" class="btn-primary">Descargar JSON</button>
+        <button class="btnClose">Cerrar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modales para Correos -->
+  <div id="modalConfirm" class="modal hidden">
+    <div class="modal-content">
+      <h3>Confirmar Envío</h3>
+      <p id="confirmMessage">¿Estás seguro de que deseas enviar este correo?</p>
+      <div class="modal-actions">
+        <button class="btn-primary" id="btnConfirmSend">Sí, Enviar</button>
+        <button class="btn-secondary btnClose">Cancelar</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="modalSuccess" class="modal hidden">
+    <div class="modal-content">
+      <h3>Correo Enviado</h3>
+      <p id="successMessage">El correo se ha enviado correctamente.</p>
+      <div class="modal-actions">
+        <button class="btn-primary btnClose">Aceptar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal para imagen ampliada -->
+  <div id="modalImage" class="modal image-modal hidden">
+    <div class="modal-content image-modal-content">
+      <img id="enlargedCoinImage" src="" alt="Imagen ampliada de la moneda" class="enlarged-coin-image">
+      <div class="modal-actions">
+        <button class="btn-secondary btnClose">Cerrar</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Datos de ejemplo para usuarios
+    let users = [
+      { id: 1, name: "Juan Pérez", dni: "12345678", email: "juan.perez@email.com", active: true },
+      { id: 2, name: "María García", dni: "87654321", email: "maria.garcia@email.com", active: true }
+    ];
+
+    // Datos de ejemplo para clientes
+    const clients = [
+      { id: 1, name: "Juan Pérez", email: "juan.perez@email.com", active: true },
+      { id: 2, name: "María García", email: "maria.garcia@email.com", active: true },
+      { id: 3, name: "Carlos López", email: "carlos.lopez@email.com", active: true },
+      { id: 4, name: "Ana Rodríguez", email: "ana.rodriguez@email.com", active: false },
+      { id: 5, name: "Luis Fernández", email: "luis.fernandez@email.com", active: true },
+      { id: 6, name: "Sofía Martínez", email: "sofia.martinez@email.com", active: true }
+    ];
+
+    // Plantillas de correo
+    const emailTemplates = {
+      welcome: {
+        subject: "Bienvenido a Monedas de la Patria",
+        body: "Estimado/a [nombre],\n\nLe damos la más cordial bienvenida a nuestra comunidad de coleccionistas de monedas argentinas. Estamos encantados de tenerle con nosotros.\n\nEn Monedas de la Patria podrá encontrar una amplia variedad de monedas históricas, realizar transacciones seguras y conectar con otros apasionados de la numismática.\n\nNo dude en contactarnos si tiene alguna pregunta.\n\nAtentamente,\nEl equipo de Monedas de la Patria"
+      },
+      promotion: {
+        subject: "Oferta Especial - Monedas Históricas",
+        body: "Estimado/a [nombre],\n\nTenemos el placer de informarle sobre nuestra oferta especial de esta semana:\n\n- 20% de descuento en monedas del siglo XIX\n- Envío gratuito en compras superiores a $5.000\n- Lote especial de monedas conmemorativas\n\nEsta oferta es válida hasta el [fecha]. No se la pierda.\n\nVisite nuestro catálogo para ver todos los productos disponibles.\n\nAtentamente,\nEl equipo de Monedas de la Patria"
+      },
+      newsletter: {
+        subject: "Boletín Mensual - Novedades Numismáticas",
+        body: "Estimado/a [nombre],\n\nAquí tiene nuestro boletín mensual con las últimas novedades:\n\n1. Nueva adquisición: Moneda de 8 Escudos de 1813\n2. Próxima subasta: Monedas del período colonial\n3. Artículo destacado: Historia del peso argentino\n4. Evento: Encuentro de coleccionistas el próximo mes\n\nManténgase informado sobre todas nuestras actualizaciones.\n\nAtentamente,\nEl equipo de Monedas de la Patria"
+      },
+      transaction: {
+        subject: "Confirmación de Transacción",
+        body: "Estimado/a [nombre],\n\nLe confirmamos que su transacción ha sido procesada correctamente.\n\nDetalles de la operación:\n- Producto: [producto]\n- Cantidad: [cantidad]\n- Precio total: [precio]\n- Fecha: [fecha]\n\nPuede realizar el seguimiento de su pedido desde su área de usuario.\n\nSi tiene alguna pregunta, no dude en contactarnos.\n\nAtentamente,\nEl equipo de Monedas de la Patria"
+      }
+    };
+
+    // Variables globales
+    let selectedClient = null;
+    let currentCoinCard = null;
+    let currentOperationType = null;
+    let currentUser = null;
+    let currentStock = 0;
+    
+    // Contraseña del sistema (inicialmente "12345")
+    let systemPassword = localStorage.getItem('systemPassword') || "12345";
+    
+    // Historial de transacciones
+    let transactions = JSON.parse(localStorage.getItem('transactions')) || [];
+
+    document.addEventListener('DOMContentLoaded', function() {
+      // Configurar navegación entre secciones
+      setupNavigation();
+      
+      // Cargar lista de usuarios
+      loadUserSelect();
+      
+      // Cargar lista de clientes
+      loadClientList();
+      
+      // Configurar eventos de plantillas
+      setupTemplateEvents();
+      
+      // Configurar eventos de botones
+      setupButtonEvents();
+      
+      // Configurar eventos de modales
+      setupModalEvents();
+      
+      // Configurar eventos para imágenes de monedas
+      setupCoinImages();
+      
+      // Actualizar estado de botones según stock inicial
+      updateStockButtons();
+      
+      // Inicializar estado de botones (deshabilitados hasta que se seleccione usuario)
+      updateOperationButtons();
+    });
+
+    // Configurar navegación entre secciones
+    function setupNavigation() {
+      document.querySelectorAll('.nav-button').forEach(button => {
+        button.addEventListener('click', function() {
+          const targetSection = this.getAttribute('data-section');
+          
+          // Actualizar botones activos
+          document.querySelectorAll('.nav-button').forEach(btn => {
+            btn.classList.remove('active');
+          });
+          this.classList.add('active');
+          
+          // Mostrar sección correspondiente
+          document.querySelectorAll('.section').forEach(section => {
+            section.classList.remove('active');
+          });
+          document.getElementById(`${targetSection}-section`).classList.add('active');
+        });
+      });
+    }
+
+    // Configurar eventos para imágenes de monedas
+    function setupCoinImages() {
+      document.querySelectorAll('.coin-photo').forEach(img => {
+        img.addEventListener('click', function() {
+          const src = this.getAttribute('src');
+          document.getElementById('enlargedCoinImage').setAttribute('src', src);
+          document.getElementById('modalImage').classList.remove('hidden');
+        });
+      });
+    }
+
+    // Cargar lista de usuarios en el selector
+    function loadUserSelect() {
+      const userSelect = document.getElementById('userSelect');
+      userSelect.innerHTML = '<option value="">-- seleccionar --</option>';
+      
+      users.forEach(user => {
+        const option = document.createElement('option');
+        option.value = user.id;
+        option.textContent = `${user.name} (DNI: ${user.dni})`;
+        userSelect.appendChild(option);
+      });
+    }
+
+    // Cargar lista de clientes
+    function loadClientList() {
+      const clientList = document.getElementById('clientList');
+      clientList.innerHTML = '';
+      
+      clients.forEach(client => {
+        const clientItem = document.createElement('div');
+        clientItem.className = 'client-item';
+        if (!client.active) {
+          clientItem.style.opacity = '0.6';
+        }
+        
+        clientItem.innerHTML = `
+          <div class="client-name">${client.name}</div>
+          <div class="client-email">${client.email}</div>
+          ${!client.active ? '<div style="color: #dc3545; font-size: 0.8rem;">Inactivo</div>' : ''}
+        `;
+        
+        clientItem.addEventListener('click', () => {
+          if (client.active) {
+            // Remover selección anterior
+            document.querySelectorAll('.client-item').forEach(item => {
+              item.classList.remove('selected');
+            });
+            
+            // Seleccionar cliente actual
+            clientItem.classList.add('selected');
+            selectedClient = client;
+            
+            // Actualizar información del destinatario
+            updateRecipientInfo();
+          }
+        });
+        
+        clientList.appendChild(clientItem);
+      });
+    }
+
+    // Configurar eventos de plantillas
+    function setupTemplateEvents() {
+      document.querySelectorAll('.template-item').forEach(template => {
+        template.addEventListener('click', () => {
+          const templateType = template.getAttribute('data-template');
+          applyTemplate(templateType);
+        });
+      });
+    }
+
+    // Aplicar plantilla seleccionada
+    function applyTemplate(templateType) {
+      const template = emailTemplates[templateType];
+      if (template) {
+        document.getElementById('emailSubject').value = template.subject;
+        document.getElementById('emailBody').value = template.body;
+      }
+    }
+
+    // Configurar eventos de botones
+    function setupButtonEvents() {
+      // ========== COMPRAS/VENTAS ==========
+      
+      // Cambio en el selector de usuario
+      document.getElementById('userSelect').addEventListener('change', function() {
+        const userId = this.value;
+        if (userId) {
+          const user = users.find(u => u.id == userId);
+          if (user) {
+            setCurrentUser(user);
+          }
+        } else {
+          clearCurrentUser();
+        }
+      });
+      
+      // Cerrar sesión
+      document.getElementById('btnLogout').addEventListener('click', function() {
+        clearCurrentUser();
+      });
+      
+      // Abrir modal Nuevo Usuario
+      document.getElementById('btnNewUser').addEventListener('click', function() {
+        document.getElementById('modalNewUser').classList.remove('hidden');
+      });
+      
+      // Abrir modal Login
+      document.getElementById('btnOpenRegister').addEventListener('click', function() {
+        document.getElementById('modalLogin').classList.remove('hidden');
+      });
+      
+      // Funcionalidad de botones Comprar/Vender
+      const buyButtons = document.querySelectorAll('.btn-buy');
+      const sellButtons = document.querySelectorAll('.btn-sell');
+      
+      buyButtons.forEach(button => {
+        button.addEventListener('click', function() {
+          if (!currentUser) {
+            alert('Debe seleccionar un usuario para realizar operaciones');
+            return;
+          }
+          
+          currentCoinCard = this.closest('.coin-card');
+          const coinName = currentCoinCard.querySelector('h3').textContent;
+          const coinPrice = currentCoinCard.querySelector('.price').textContent;
+          currentStock = parseInt(currentCoinCard.getAttribute('data-stock'));
+          
+          if (currentStock <= 0) {
+            alert('No hay stock disponible para esta moneda');
+            return;
+          }
+          
+          currentOperationType = 'buy';
+          document.getElementById('opTitle').textContent = 'Comprar Moneda';
+          document.getElementById('opCoinInfo').innerHTML = `
+            <p><strong>Moneda:</strong> ${coinName}</p>
+            <p><strong>Precio:</strong> ${coinPrice}</p>
+            <p><strong>Stock disponible:</strong> ${currentStock}</p>
+            <p><strong>Usuario:</strong> ${currentUser.name}</p>
+          `;
+          document.getElementById('txtCantidad').max = currentStock;
+          document.getElementById('txtCantidad').value = 1;
+          
+          // Para compras, mostrar modal de autenticación
+          document.getElementById('modalAuth').classList.remove('hidden');
+        });
+      });
+      
+      sellButtons.forEach(button => {
+        button.addEventListener('click', function() {
+          if (!currentUser) {
+            alert('Debe seleccionar un usuario para realizar operaciones');
+            return;
+          }
+          
+          currentCoinCard = this.closest('.coin-card');
+          const coinName = currentCoinCard.querySelector('h3').textContent;
+          const coinPrice = currentCoinCard.querySelector('.price').textContent;
+          
+          currentOperationType = 'sell';
+          document.getElementById('opTitle').textContent = 'Vender Moneda';
+          document.getElementById('opCoinInfo').innerHTML = `
+            <p><strong>Moneda:</strong> ${coinName}</p>
+            <p><strong>Precio de referencia:</strong> ${coinPrice}</p>
+            <p><strong>Usuario:</strong> ${currentUser.name}</p>
+          `;
+          document.getElementById('txtCantidad').max = '';
+          document.getElementById('txtCantidad').value = 1;
+          document.getElementById('modalOperation').classList.remove('hidden');
+        });
+      });
+      
+      // Verificar autenticación
+      document.getElementById('btnAuth').addEventListener('click', function() {
+        const password = document.getElementById('txtPassword').value;
+        
+        if (password === systemPassword) {
+          document.getElementById('modalAuth').classList.add('hidden');
+          document.getElementById('txtPassword').value = '';
+          document.getElementById('modalOperation').classList.remove('hidden');
+        } else {
+          alert('Contraseña incorrecta');
+        }
+      });
+      
+      // Confirmar operación
+      document.getElementById('btnConfirmOp').addEventListener('click', function() {
+        const opType = document.getElementById('opTitle').textContent;
+        const cantidad = parseInt(document.getElementById('txtCantidad').value);
+        
+        if (isNaN(cantidad) || cantidad <= 0) {
+          alert('Por favor ingrese una cantidad válida');
+          return;
+        }
+        
+        // Validar stock para compras
+        if (currentOperationType === 'buy' && cantidad > currentStock) {
+          alert(`No hay suficiente stock disponible. Stock actual: ${currentStock}`);
+          return;
+        }
+        
+        // Registrar transacción
+        registerTransaction(currentOperationType, cantidad);
+        
+        // Actualizar stock
+        updateStock(currentCoinCard, currentOperationType, cantidad);
+        
+        alert(`Operación confirmada: ${opType} - Cantidad: ${cantidad}`);
+        document.getElementById('modalOperation').classList.add('hidden');
+        
+        // Actualizar ticket
+        document.getElementById('ticketArea').innerHTML = `
+          <p><strong>Operación realizada:</strong> ${opType}</p>
+          <p><strong>Usuario:</strong> ${currentUser.name}</p>
+          <p><strong>Cantidad:</strong> ${cantidad}</p>
+          <p><strong>Fecha:</strong> ${new Date().toLocaleDateString()}</p>
+          <p><strong>Estado:</strong> Pendiente de pago</p>
+        `;
+      });
+      
+      // Guardar usuario
+      document.getElementById('btnSaveUser').addEventListener('click', function() {
+        const nombre = document.getElementById('txtNewName').value;
+        const dni = document.getElementById('txtNewDNI').value;
+        const email = document.getElementById('txtNewEmail').value;
+        
+        if (nombre && dni && email) {
+          // Verificar si el DNI ya existe
+          const existingUser = users.find(user => user.dni === dni);
+          if (existingUser) {
+            alert(`Ya existe un usuario con el DNI ${dni}`);
+            return;
+          }
+          
+          // Crear nuevo usuario
+          const newUser = {
+            id: users.length > 0 ? Math.max(...users.map(u => u.id)) + 1 : 1,
+            name: nombre,
+            dni: dni,
+            email: email,
+            active: true
+          };
+          
+          // Agregar a la lista de usuarios
+          users.push(newUser);
+          
+          // Actualizar selector de usuarios
+          loadUserSelect();
+          
+          // Establecer como usuario actual
+          setCurrentUser(newUser);
+          
+          alert(`Usuario ${nombre} guardado correctamente. Se enviará un correo de confirmación a ${email}`);
+          document.getElementById('modalNewUser').classList.add('hidden');
+          
+          // Limpiar campos
+          document.getElementById('txtNewName').value = '';
+          document.getElementById('txtNewDNI').value = '';
+          document.getElementById('txtNewEmail').value = '';
+        } else {
+          alert('Por favor complete todos los campos');
+        }
+      });
+      
+      // Login
+      document.getElementById('btnLogin').addEventListener('click', function() {
+        const login = document.getElementById('txtLogin').value;
+        
+        if (login) {
+          // Buscar usuario por DNI o nombre
+          const foundUser = users.find(user => 
+            user.dni === login || user.name.toLowerCase().includes(login.toLowerCase())
+          );
+          
+          if (foundUser) {
+            setCurrentUser(foundUser);
+            document.getElementById('modalLogin').classList.add('hidden');
+            document.getElementById('txtLogin').value = '';
+          } else {
+            alert('No se encontró ningún usuario con ese DNI o nombre');
+          }
+        } else {
+          alert('Por favor ingrese un DNI o nombre');
+        }
+      });
+      
+      // Generar reporte JSON
+      document.getElementById('btnGenerarReporte').addEventListener('click', function() {
+        generateJSONReport();
+      });
+      
+      // Cambiar contraseña
+      document.getElementById('btnCambiarPassword').addEventListener('click', function() {
+        document.getElementById('modalChangePassword').classList.remove('hidden');
+      });
+      
+      // Confirmar cambio de contraseña
+      document.getElementById('btnChangePassword').addEventListener('click', function() {
+        const current = document.getElementById('txtCurrentPassword').value;
+        const newPass = document.getElementById('txtNewPassword').value;
+        const confirmPass = document.getElementById('txtConfirmPassword').value;
+        
+        if (!current || !newPass || !confirmPass) {
+          alert('Por favor complete todos los campos');
+          return;
+        }
+        
+        if (current !== systemPassword) {
+          alert('La contraseña actual es incorrecta');
+          return;
+        }
+        
+        if (newPass !== confirmPass) {
+          alert('Las nuevas contraseñas no coinciden');
+          return;
+        }
+        
+        systemPassword = newPass;
+        localStorage.setItem('systemPassword', systemPassword);
+        
+        alert('Contraseña cambiada correctamente');
+        document.getElementById('modalChangePassword').classList.add('hidden');
+        
+        // Limpiar campos
+        document.getElementById('txtCurrentPassword').value = '';
+        document.getElementById('txtNewPassword').value = '';
+        document.getElementById('txtConfirmPassword').value = '';
+      });
+      
+      // Descargar reporte JSON
+      document.getElementById('btnDownloadReport').addEventListener('click', function() {
+        downloadJSONReport();
+      });
+      
+      // ========== CORREOS ==========
+      
+      // Enviar correo
+      document.getElementById('btnSendEmail').addEventListener('click', () => {
+        const subject = document.getElementById('emailSubject').value;
+        const body = document.getElementById('emailBody').value;
+        const recipientType = document.querySelector('input[name="recipientType"]:checked').value;
+        
+        if (!subject || !body) {
+          alert('Por favor, complete el asunto y el mensaje del correo.');
+          return;
+        }
+        
+        if (recipientType === 'single' && !selectedClient) {
+          alert('Por favor, seleccione un cliente de la lista.');
+          return;
+        }
+        
+        // Mostrar modal de confirmación
+        let message = '';
+        if (recipientType === 'single') {
+          message = `¿Está seguro de que desea enviar este correo a ${selectedClient.name} (${selectedClient.email})?`;
+        } else {
+          const activeClients = clients.filter(client => client.active);
+          message = `¿Está seguro de que desea enviar este correo a todos los clientes activos (${activeClients.length} destinatarios)?`;
+        }
+        
+        document.getElementById('confirmMessage').textContent = message;
+        document.getElementById('modalConfirm').classList.remove('hidden');
+      });
+      
+      // Confirmar envío
+      document.getElementById('btnConfirmSend').addEventListener('click', () => {
+        sendEmail();
+      });
+      
+      // Guardar borrador
+      document.getElementById('btnSaveDraft').addEventListener('click', () => {
+        const subject = document.getElementById('emailSubject').value;
+        const body = document.getElementById('emailBody').value;
+        
+        if (!subject && !body) {
+          alert('No hay contenido para guardar como borrador.');
+          return;
+        }
+        
+        // En una implementación real, aquí se guardaría en una base de datos
+        localStorage.setItem('emailDraft', JSON.stringify({ subject, body }));
+        alert('Borrador guardado correctamente.');
+      });
+      
+      // Limpiar formulario
+      document.getElementById('btnClearForm').addEventListener('click', () => {
+        if (confirm('¿Está seguro de que desea limpiar el formulario? Se perderán los cambios no guardados.')) {
+          document.getElementById('emailSubject').value = '';
+          document.getElementById('emailBody').value = '';
+        }
+      });
+      
+      // Cargar borrador si existe
+      const draft = localStorage.getItem('emailDraft');
+      if (draft) {
+        if (confirm('¿Desea cargar el borrador guardado anteriormente?')) {
+          const draftData = JSON.parse(draft);
+          document.getElementById('emailSubject').value = draftData.subject || '';
+          document.getElementById('emailBody').value = draftData.body || '';
+        }
+      }
+    }
+
+    // Configurar eventos de modales
+    function setupModalEvents() {
+      // Cerrar modales
+      document.querySelectorAll('.btnClose').forEach(button => {
+        button.addEventListener('click', () => {
+          document.querySelectorAll('.modal').forEach(modal => {
+            modal.classList.add('hidden');
+          });
+        });
+      });
+    }
+
+    // Establecer usuario actual
+    function setCurrentUser(user) {
+      currentUser = user;
+      
+      // Actualizar interfaz
+      document.getElementById('currentUserName').textContent = user.name;
+      document.getElementById('currentUserDisplay').style.display = 'flex';
+      document.getElementById('userSelect').value = user.id;
+      
+      // Actualizar estado de botones
+      updateOperationButtons();
+      
+      // Ocultar mensaje de usuario requerido
+      document.getElementById('userRequiredMessage').style.display = 'none';
+      
+      // Mostrar mensaje de bienvenida en el ticket
+      document.getElementById('ticketArea').innerHTML = `
+        <p>Bienvenido/a, <strong>${user.name}</strong>!</p>
+        <p>Ya puede realizar operaciones de compra y venta.</p>
+      `;
+    }
+
+    // Limpiar usuario actual
+    function clearCurrentUser() {
+      currentUser = null;
+      
+      // Actualizar interfaz
+      document.getElementById('currentUserDisplay').style.display = 'none';
+      document.getElementById('userSelect').value = '';
+      
+      // Actualizar estado de botones
+      updateOperationButtons();
+      
+      // Mostrar mensaje de usuario requerido
+      document.getElementById('userRequiredMessage').style.display = 'block';
+      
+      // Restablecer ticket
+      document.getElementById('ticketArea').innerHTML = `
+        <p>No hay operaciones aún.</p>
+        <p>Selecciona un usuario y realiza una operación para ver el resumen aquí.</p>
+      `;
+    }
+
+    // Actualizar estado de los botones de operación
+    function updateOperationButtons() {
+      const buyButtons = document.querySelectorAll('.btn-buy');
+      const sellButtons = document.querySelectorAll('.btn-sell');
+      
+      if (currentUser) {
+        // Habilitar botones si hay usuario y stock
+        buyButtons.forEach(button => {
+          const coinCard = button.closest('.coin-card');
+          const currentStock = parseInt(coinCard.getAttribute('data-stock'));
+          button.disabled = currentStock <= 0;
+        });
+        
+        sellButtons.forEach(button => {
+          button.disabled = false;
+        });
+      } else {
+        // Deshabilitar todos los botones si no hay usuario
+        buyButtons.forEach(button => {
+          button.disabled = true;
+        });
+        
+        sellButtons.forEach(button => {
+          button.disabled = true;
+        });
+      }
+    }
+
+    // Actualizar información del destinatario
+    function updateRecipientInfo() {
+      if (selectedClient) {
+        // En una implementación real, aquí se podrían mostrar más detalles del cliente
+        console.log(`Cliente seleccionado: ${selectedClient.name}`);
+      }
+    }
+
+    // Actualizar stock de una moneda
+    function updateStock(coinCard, operationType, quantity) {
+      const currentStock = parseInt(coinCard.getAttribute('data-stock'));
+      let newStock;
+      
+      if (operationType === 'buy') {
+        newStock = currentStock - quantity;
+        if (newStock < 0) newStock = 0;
+      } else if (operationType === 'sell') {
+        newStock = currentStock + quantity;
+      }
+      
+      // Actualizar el atributo data-stock
+      coinCard.setAttribute('data-stock', newStock);
+      
+      // Actualizar el texto del stock
+      const stockElement = coinCard.querySelector('.stock-count');
+      stockElement.textContent = newStock;
+      
+      // Actualizar la clase de color según el stock
+      const stockContainer = coinCard.querySelector('.coin-stock');
+      stockContainer.classList.remove('stock-high', 'stock-medium', 'stock-low');
+      
+      if (newStock >= 5) {
+        stockContainer.classList.add('stock-high');
+      } else if (newStock >= 1) {
+        stockContainer.classList.add('stock-medium');
+      } else {
+        stockContainer.classList.add('stock-low');
+      }
+      
+      // Actualizar estado de los botones
+      updateStockButtons();
+      updateOperationButtons();
+    }
+    
+    // Actualizar estado de los botones según el stock
+    function updateStockButtons() {
+      document.querySelectorAll('.coin-card').forEach(coinCard => {
+        const currentStock = parseInt(coinCard.getAttribute('data-stock'));
+        const buyButton = coinCard.querySelector('.btn-buy');
+        
+        if (currentStock <= 0) {
+          buyButton.disabled = true;
+        } else if (currentUser) {
+          buyButton.disabled = false;
+        }
+      });
+    }
+
+    // Registrar transacción
+    function registerTransaction(type, quantity) {
+      const coinId = parseInt(currentCoinCard.getAttribute('data-id'));
+      const coinName = currentCoinCard.querySelector('h3').textContent;
+      const coinPriceText = currentCoinCard.querySelector('.price').textContent;
+      const coinPrice = parseFloat(coinPriceText.replace(/[^\d.]/g, ''));
+      
+      const transaction = {
+        id: transactions.length > 0 ? Math.max(...transactions.map(t => t.id)) + 1 : 1,
+        userId: currentUser.id,
+        userName: currentUser.name,
+        type: type,
+        coinId: coinId,
+        coinName: coinName,
+        quantity: quantity,
+        price: coinPrice,
+        total: coinPrice * quantity,
+        date: new Date().toISOString()
+      };
+      
+      transactions.push(transaction);
+      localStorage.setItem('transactions', JSON.stringify(transactions));
+    }
+
+    // Generar reporte JSON
+    function generateJSONReport() {
+      if (transactions.length === 0) {
+        alert('No hay transacciones para generar reporte');
+        return;
+      }
+      
+      // Agrupar transacciones por usuario
+      const report = {
+        fechaGeneracion: new Date().toISOString(),
+        resumen: {
+          totalTransacciones: transactions.length,
+          totalCompras: transactions.filter(t => t.type === 'buy').length,
+          totalVentas: transactions.filter(t => t.type === 'sell').length,
+          montoTotal: transactions.reduce((sum, t) => sum + t.total, 0)
+        },
+        usuarios: {}
+      };
+      
+      // Organizar transacciones por usuario
+      transactions.forEach(transaction => {
+        const userId = transaction.userId;
+        
+        if (!report.usuarios[userId]) {
+          report.usuarios[userId] = {
+            nombre: transaction.userName,
+            transacciones: [],
+            resumen: {
+              compras: 0,
+              ventas: 0,
+              montoTotal: 0
+            }
+          };
+        }
+        
+        report.usuarios[userId].transacciones.push(transaction);
+        
+        if (transaction.type === 'buy') {
+          report.usuarios[userId].resumen.compras += 1;
+        } else {
+          report.usuarios[userId].resumen.ventas += 1;
+        }
+        
+        report.usuarios[userId].resumen.montoTotal += transaction.total;
+      });
+      
+      // Mostrar reporte en modal
+      document.getElementById('jsonReport').textContent = JSON.stringify(report, null, 2);
+      document.getElementById('modalReport').classList.remove('hidden');
+    }
+
+    // Descargar reporte JSON
+    function downloadJSONReport() {
+      const reportContent = document.getElementById('jsonReport').textContent;
+      const blob = new Blob([reportContent], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `reporte_transacciones_${new Date().toISOString().split('T')[0]}.json`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    }
+
+    // Simular envío de correo
+    function sendEmail() {
+      const subject = document.getElementById('emailSubject').value;
+      const body = document.getElementById('emailBody').value;
+      const recipientType = document.querySelector('input[name="recipientType"]:checked').value;
+      
+      // Simular envío (en una implementación real, aquí se conectaría con un servidor)
+      setTimeout(() => {
+        document.getElementById('modalConfirm').classList.add('hidden');
+        
+        let message = '';
+        if (recipientType === 'single') {
+          message = `El correo se ha enviado correctamente a ${selectedClient.name}.`;
+        } else {
+          const activeClients = clients.filter(client => client.active);
+          message = `El correo se ha enviado correctamente a ${activeClients.length} clientes.`;
+        }
+        
+        document.getElementById('successMessage').textContent = message;
+        document.getElementById('modalSuccess').classList.remove('hidden');
+        
+        // Limpiar formulario después del envío
+        document.getElementById('emailSubject').value = '';
+        document.getElementById('emailBody').value = '';
+        selectedClient = null;
+        
+        // Remover selección de cliente
+        document.querySelectorAll('.client-item').forEach(item => {
+          item.classList.remove('selected');
+        });
+      }, 1500);
+    }
+  </script>
+</body>
+</html>
